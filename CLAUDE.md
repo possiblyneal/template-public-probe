@@ -12,7 +12,7 @@ Located at `./scripts`. Use these instead of per-language tools; each detects th
 
 ## Expected initial state
 
-There is no root manifest, so `scripts/check` reports `No project manifest found, so there is nothing to check yet` and every language check has nothing to run. `scripts/doctor` passes rather than complaining: its `detection` rule fires on a nested manifest with no root counterpart, and with no manifest anywhere there is no orphan to name. That is the state `docs/adrs/0001-keep-the-probe-unit-languageless.md` decided, not a defect.
+There is no root manifest, so `scripts/check` reports `No project manifest found, so there is nothing to check yet` and every language check has nothing to run. `scripts/doctor` passes rather than complaining, for the reason `docs/adrs/0001-keep-the-probe-unit-languageless.md` gives under Consequences. That is the state the ADR decided, not a defect.
 
 ## Child Index
 
