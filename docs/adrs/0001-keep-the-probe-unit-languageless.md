@@ -4,7 +4,7 @@ title: Keep the Probe Unit Languageless
 description: No constraint binds this repository's one deployable, so apps/probe selects no language and renders no manifest.
 scope: [apps/probe]
 tags: [verification]
-generated: { by: "agent/claude-opus-5", at: "2026-09-21T17:55:46Z" }
+generated: { by: "agent/claude-opus-5", at: "2026-09-21T19:40:21Z" }
 superseded_by:
 status: accepted
 ---
@@ -30,23 +30,15 @@ branch-ruleset creation and its `GH013` enforcement probe, CodeQL's
 the public-repository addons being offered. None of those runs any of
 this repository's code, and none of them turns on a language.
 
-The footing is the third of the three `wayfinding.md` names: chosen
-from the short form's list, not measured and not reasoned from a seam
-contract. Both questions were put to the operator after the bootstrap
-pull request merged — what ships separately, and what binds first for
-it — and both were answered: one deployable named `probe`, and no
-language. The alternatives offered were Python, for the breadth of
-template machinery a real manifest turns on, and Go, for a `dist/`
-executable out of `scripts/package`; the operator declined both.
-
-That session was owed earlier than it happened. The generate skipped it
-on the strength of an invocation that named the deployable but not its
-language, and
+The choke point was chosen from the short form's list rather than
+reasoned from a seam contract or measured against one, which is the
+weakest of the three footings
 [Wayfinding](https://github.com/possiblyneal/template/blob/main/apps/repo-builder/src/references/wayfinding.md)
-permits a skip only where the invocation names both. The skip is
-recorded here because the questions and their answers are what this
-record now rests on, and a reader is entitled to know they were asked
-late rather than assumed.
+names. Both of its questions were put to the operator — what ships
+separately, and what binds first for it — and answered: one deployable
+named `probe`, and no language. They were asked after the bootstrap
+pull request merged rather than before personalization, because the
+generate skipped wayfinding on an invocation that named neither.
 
 ## Alternatives Considered
 
@@ -68,6 +60,17 @@ against this repository and each found not to bind:
 *None of these bind* is the answer, and it is recorded here rather than
 left as an absence so that a later reader can tell a constraint checked
 from a constraint nobody looked at.
+
+With nothing binding, two languages were put to the operator on their
+merits and both were declined without a reason given:
+
+- **Python** — would turn on the most template machinery at once,
+  since uv, ruff, ty, and pytest all run against a real manifest.
+- **Go** — `scripts/package` would produce a real `linux-amd64`
+  executable in `dist/`.
+
+The merits above are the ones that were offered, not reasons the
+operator gave. Only the choice is recorded here.
 
 ## Consequences
 
