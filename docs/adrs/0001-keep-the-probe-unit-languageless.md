@@ -4,7 +4,7 @@ title: Keep the Probe Unit Languageless
 description: No constraint binds this repository's one deployable, so apps/probe selects no language and renders no manifest.
 scope: [apps/probe]
 tags: [verification]
-generated: { by: "agent/claude-opus-5", at: "2026-09-21T19:40:21Z" }
+generated: { by: "agent/claude-opus-5", at: "2026-09-21T19:53:36Z" }
 superseded_by:
 status: accepted
 ---
