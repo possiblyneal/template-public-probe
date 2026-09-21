@@ -60,3 +60,5 @@ tidier.
 ruleset binds. `GH007` is also a rejected push, so a probe that trips it reads
 as success to anything checking only that the push failed, and the ruleset goes
 unverified while being reported as verified.
+
+**Source:** [Blocking command line pushes that expose your personal email address](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/blocking-command-line-pushes-that-expose-your-personal-email-address)
