@@ -1,10 +1,10 @@
 ## What this repository is
 
-A throwaway verification target, generated from `possiblyneal/template` at `8860a8b`. It exists to prove the four paths a generate takes only against a **public** destination: secret-scanning push protection, branch-ruleset creation and its `GH013` enforcement probe, CodeQL's `Detect languages` and `Analyze` legs running rather than skipping, and the public-repository addons being offered. Nothing here is a product.
+A throwaway verification target, generated from `possiblyneal/template` at `8860a8b`. It exists to prove the four paths a generate takes only against a **public** destination; `docs/adrs/0001-keep-the-probe-unit-languageless.md` names them. Nothing here is a product.
 
 ## Commands
 
-Located at `./scripts` Use these instead of per-language tools; each detects the languages present and fails when an expected check cannot run. `./scripts/CLAUDE.md` documents all of them.
+Located at `./scripts`. Use these instead of per-language tools; each detects the languages present and fails when an expected check cannot run. `./scripts/CLAUDE.md` documents all of them.
 
 ## Git
 
@@ -12,9 +12,9 @@ Located at `./scripts` Use these instead of per-language tools; each detects the
 
 ## Expected initial state
 
-There is no root manifest, so `scripts/doctor` reports one missing and every language check has nothing to run. That is the state `docs/adrs/0001-keep-the-probe-unit-languageless.md` decided, not a defect.
+There is no root manifest, so `scripts/check` reports `No project manifest found, so there is nothing to check yet` and every language check has nothing to run. `scripts/doctor` passes rather than complaining: its `detection` rule fires on a nested manifest with no root counterpart, and with no manifest anywhere there is no orphan to name. That is the state `docs/adrs/0001-keep-the-probe-unit-languageless.md` decided, not a defect.
 
 ## Child Index
 
 - `scripts/CLAUDE.md` — the language-capabilities interface, the result states, the test harness, and what adding a language or check requires
-- `apps/probe/` — the single deployable, a placeholder skeleton with no language and no `CLAUDE.md` of its own
+- `apps/probe/` — the single deployable: a placeholder skeleton for the verification this repository exists to run, with no language selected and no `CLAUDE.md` of its own. `docs/adrs/0001-keep-the-probe-unit-languageless.md` records why no constraint binds

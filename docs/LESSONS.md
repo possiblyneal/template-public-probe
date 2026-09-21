@@ -46,5 +46,17 @@ orphan, but lint, type check, and test see no package at all and pass.
 
 ## Lessons
 
-<Add repository lessons below this line. Replace this placeholder with the
-first real lesson.>
+## Commit the ruleset probe under the repository's own git identity
+
+A public repository rejects a push whose commit author is a GitHub-registered
+private address with `GH007: Your push would publish a private email address`,
+before any repository rule is evaluated.
+
+**Do:** Let the probe commit take the clone's configured `user.email`. Do not
+override it with the account's registered address to make the attribution look
+tidier.
+
+**Why:** The probe's whole purpose is to read back `GH013` and prove the branch
+ruleset binds. `GH007` is also a rejected push, so a probe that trips it reads
+as success to anything checking only that the push failed, and the ruleset goes
+unverified while being reported as verified.
