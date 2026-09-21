@@ -35,8 +35,8 @@ of the three footings
 [Wayfinding](https://github.com/possiblyneal/template/blob/main/apps/repo-builder/src/references/wayfinding.md)
 names this record stands on the first and weakest — a choice off a
 list — and it is the one Wayfinding says is soonest worth revisiting.
-The list was not the short form's, for the reason below. Both of its
-questions were put to the operator — what ships separately, and what
+The list was not the short form's, for the reason below. Both
+wayfinding questions were put to the operator — what ships separately, and what
 binds first for it — and answered: one deployable named `probe`, and
 no language. They were asked after the bootstrap pull request merged
 rather than before personalization, because the generate skipped
