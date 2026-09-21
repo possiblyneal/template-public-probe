@@ -21,8 +21,8 @@ that brings a manifest supersedes it.
 
 ## Context
 
-The choke point was not established at all, which is itself the
-finding. This repository was generated from `possiblyneal/template` at
+No constraint binds, so no choke point sets the language. This
+repository was generated from `possiblyneal/template` at
 `8860a8b` for one purpose: to exercise the four paths a generate takes
 only against a public destination — secret-scanning push protection,
 branch-ruleset creation and its `GH013` enforcement probe, CodeQL's
@@ -30,17 +30,23 @@ branch-ruleset creation and its `GH013` enforcement probe, CodeQL's
 the public-repository addons being offered. None of those runs any of
 this repository's code, and none of them turns on a language.
 
-The footing is therefore the weakest of the three `wayfinding.md` names
-— not measured, not reasoned from a seam contract, and not chosen from
-the short form's list either. The two questions were never put to the
-operator: the deployable name came from the invocation and the language
-answer was taken rather than asked, which is a deviation from
-[Wayfinding](https://github.com/possiblyneal/template/blob/main/apps/repo-builder/src/references/wayfinding.md)'s
-own rule that wayfinding is skipped only where the invocation names
-every deployable *and* its language. It named no language. So this
-record's footing is weaker still than an unmeasured constraint, and the
-decision is worth revisiting the moment this repository is asked to do
-anything.
+The footing is the third of the three `wayfinding.md` names: chosen
+from the short form's list, not measured and not reasoned from a seam
+contract. Both questions were put to the operator after the bootstrap
+pull request merged — what ships separately, and what binds first for
+it — and both were answered: one deployable named `probe`, and no
+language. The alternatives offered were Python, for the breadth of
+template machinery a real manifest turns on, and Go, for a `dist/`
+executable out of `scripts/package`; the operator declined both.
+
+That session was owed earlier than it happened. The generate skipped it
+on the strength of an invocation that named the deployable but not its
+language, and
+[Wayfinding](https://github.com/possiblyneal/template/blob/main/apps/repo-builder/src/references/wayfinding.md)
+permits a skip only where the invocation names both. The skip is
+recorded here because the questions and their answers are what this
+record now rests on, and a reader is entitled to know they were asked
+late rather than assumed.
 
 ## Alternatives Considered
 
@@ -71,5 +77,5 @@ rule names a nested manifest with no root counterpart, and with no
 manifest anywhere there is no orphan to name. So the repository is
 green on a tree that runs nothing, and this record is the only thing
 saying that was chosen. Anyone extending it past the verification it
-was built for owes an ADR that supersedes this one, and owes the
-wayfinding session this one skipped.
+was built for owes an ADR that supersedes this one; the wayfinding
+session is no longer outstanding.
