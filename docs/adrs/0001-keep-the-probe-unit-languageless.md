@@ -30,11 +30,12 @@ branch-ruleset creation and its `GH013` enforcement probe, CodeQL's
 the public-repository addons being offered. None of those runs any of
 this repository's code, and none of them turns on a language.
 
-The choke point was chosen from the short form's list rather than
-reasoned from a seam contract or measured against one, which is the
-weakest of the three footings
+Nothing was measured and there is no seam contract to reason from, so
+of the three footings
 [Wayfinding](https://github.com/possiblyneal/template/blob/main/apps/repo-builder/src/references/wayfinding.md)
-names and the one it says is soonest worth revisiting. Both of its
+names this record stands on the first and weakest — a choice off a
+list — and it is the one Wayfinding says is soonest worth revisiting.
+The list was not the short form's, for the reason below. Both of its
 questions were put to the operator — what ships separately, and what
 binds first for it — and answered: one deployable named `probe`, and
 no language. They were asked after the bootstrap pull request merged
@@ -84,7 +85,8 @@ merits and both were declined without a reason given:
   most template machinery at once, since uv, ruff, ty, and pytest all
   run against a real manifest.
 - **Go** — `scripts/package` would produce a real `linux-amd64`
-  executable in `dist/` (`scripts/package:49`).
+  executable in `dist/`, via `scripts/libs/detect.sh:598` and the
+  `go build -o "dist/..."` at `detect.sh:643`.
 
 The merits above are the ones that were offered, not reasons the
 operator gave. Only the choice is recorded here.
