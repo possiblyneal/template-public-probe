@@ -4,7 +4,7 @@ title: Keep the Probe Unit Languageless
 description: No constraint binds this repository's one deployable, so apps/probe selects no language and renders no manifest.
 scope: [apps/probe]
 tags: [verification]
-generated: { by: "agent/claude-opus-5", at: "2026-09-21T19:53:36Z" }
+generated: { by: "agent/claude-opus-5", at: "2026-09-21T20:16:30Z" }
 superseded_by:
 status: accepted
 ---
@@ -86,7 +86,7 @@ merits and both were declined without a reason given:
   run against a real manifest.
 - **Go** — `scripts/package` would produce a real `linux-amd64`
   executable in `dist/`, via `scripts/libs/detect.sh:598` and the
-  `go build -o "dist/..."` at `detect.sh:643`.
+  `go build -o "dist/..."` at `detect.sh:644`.
 
 The merits above are the ones that were offered, not reasons the
 operator gave. Only the choice is recorded here.
