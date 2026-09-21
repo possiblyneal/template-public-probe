@@ -34,16 +34,31 @@ The choke point was chosen from the short form's list rather than
 reasoned from a seam contract or measured against one, which is the
 weakest of the three footings
 [Wayfinding](https://github.com/possiblyneal/template/blob/main/apps/repo-builder/src/references/wayfinding.md)
-names. Both of its questions were put to the operator — what ships
-separately, and what binds first for it — and answered: one deployable
-named `probe`, and no language. They were asked after the bootstrap
-pull request merged rather than before personalization, because the
-generate skipped wayfinding on an invocation that named neither.
+names and the one it says is soonest worth revisiting. Both of its
+questions were put to the operator — what ships separately, and what
+binds first for it — and answered: one deployable named `probe`, and
+no language. They were asked after the bootstrap pull request merged
+rather than before personalization, because the generate skipped
+wayfinding on an invocation that named neither.
+
+Two departures from the method belong in this record rather than
+beside it. The second question was put as a choice between outcomes —
+Python, Go, or no language — where Wayfinding specifies the five
+constraints plus *none of these bind*, so the constraint walk below is
+the agent's own check and not the operator's. And *no language* is not
+an answer the method offers at all: `choosing_a_language.md` sends an
+unbound case to a tiebreaker of time-to-working-code, "**Python**, or
+whatever the repository already runs". The operator was shown Python
+and declined it. That is a deliberate departure from the tiebreaker,
+made by the person the tiebreaker exists to serve, and it holds only
+while this repository runs nothing.
 
 ## Alternatives Considered
 
-The five constraints `choosing_a_language.md` offers, each checked
-against this repository and each found not to bind:
+The five constraints `choosing_a_language.md` offers, each checked by
+the agent against this repository and each found not to bind. They
+were not the options the operator was shown, for the reason Context
+gives:
 
 - **Browser or device execution** — nothing here executes anywhere; the
   repository is read by GitHub's own services and by no runtime.
@@ -61,13 +76,15 @@ against this repository and each found not to bind:
 left as an absence so that a later reader can tell a constraint checked
 from a constraint nobody looked at.
 
-With nothing binding, two languages were put to the operator on their
+With nothing binding, the tiebreaker at `choosing_a_language.md` line
+118 would take it. Two languages were put to the operator on their
 merits and both were declined without a reason given:
 
-- **Python** — would turn on the most template machinery at once,
-  since uv, ruff, ty, and pytest all run against a real manifest.
+- **Python** — the tiebreaker's own answer, and it would turn on the
+  most template machinery at once, since uv, ruff, ty, and pytest all
+  run against a real manifest.
 - **Go** — `scripts/package` would produce a real `linux-amd64`
-  executable in `dist/`.
+  executable in `dist/` (`scripts/package:49`).
 
 The merits above are the ones that were offered, not reasons the
 operator gave. Only the choice is recorded here.
