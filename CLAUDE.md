@@ -4,7 +4,7 @@ A throwaway verification target, generated from `possiblyneal/template` at `8860
 
 ## Commands
 
-Located at `./scripts`. Use these instead of per-language tools; each detects the languages present and fails when an expected check cannot run. `./scripts/CLAUDE.md` documents all of them.
+Located at `./scripts`. Use these instead of per-language tools; each detects the languages present and fails when an expected check cannot run.
 
 ## Git
 
@@ -16,5 +16,4 @@ There is no root manifest, so `scripts/check` reports `No project manifest found
 
 ## Child Index
 
-- `scripts/CLAUDE.md` — the language-capabilities interface, the result states, the test harness, and what adding a language or check requires
 - `apps/probe/` — the single deployable: a placeholder skeleton for the verification this repository exists to run, with no language selected and no `CLAUDE.md` of its own. `docs/adrs/0001-keep-the-probe-unit-languageless.md` records why no constraint binds
