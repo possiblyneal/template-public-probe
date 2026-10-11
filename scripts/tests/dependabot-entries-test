@@ -12,7 +12,13 @@ set -uo pipefail
 # line.
 #
 # So the cases here run in both directions: every shape that must be read as
-# watched, and every shape that must not be.
+# watched -- the singular and plural keys, a glob directory, a second entry
+# after a list, a uv entry over a pyproject.toml with uv.lock beside it, one
+# docker entry over every Containerfile in its directory -- and every shape that
+# must not be: a commented-out entry, a workspace file, a manifest outside the
+# mapped set, a container ignore file, an untracked one, and an npm workspace
+# member, still named because the doctor advisory rather than the library
+# carries the workspace exception.
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
@@ -212,11 +218,11 @@ else
 fi
 
 
-# The decision the operator made: the six the template detects and no seventh.
-# A manifest outside that vocabulary is a shape the rest of the checks cannot
-# see, and reporting it here would promise an entry the derivation will not
-# write.
-fixture "a manifest outside the six is not reported" "$VERSION
+# The decision the operator made: the six the template detects, plus docker for
+# the Containerfiles the layout gives a place, and nothing else. A manifest
+# outside that vocabulary is a shape the rest of the checks cannot see, and
+# reporting it here would promise an entry the derivation will not write.
+fixture "a manifest outside the mapped set is not reported" "$VERSION
   - package-ecosystem: github-actions
     directory: /
     schedule:
@@ -419,6 +425,117 @@ if [[ -z "$got" ]]; then
   pass
 else
   fail "a list at the key's own indentation left '$got' reported"
+fi
+
+
+# A uv.lock beside the manifest makes it uv's: pip's updater leaves the
+# lockfile behind, so a pip entry there watches nothing that lands cleanly.
+fixture "a pyproject.toml beside a uv.lock is watched by a uv entry" "$VERSION
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: weekly" pyproject.toml uv.lock
+got="$(unwatched_in)"
+if [[ -z "$got" ]]; then
+  pass
+else
+  fail "reported '$got' for a uv project whose uv entry is right there"
+fi
+
+
+fixture "a pip entry does not cover a pyproject.toml beside a uv.lock" "$VERSION
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly" pyproject.toml uv.lock
+got="$(unwatched_in)"
+if [[ "$got" == "pyproject.toml" ]]; then
+  pass
+else
+  fail "reported '$got', so a pip entry read as moving uv.lock"
+fi
+
+
+fixture "a uv.lock elsewhere leaves a pyproject.toml pip's" "$VERSION
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: pip
+    directory: /tools/lint
+    schedule:
+      interval: weekly" pyproject.toml uv.lock tools/lint/pyproject.toml
+got="$(unwatched_in)"
+if [[ -z "$got" ]]; then
+  pass
+else
+  fail "reported '$got', so the root uv.lock claimed a nested manifest"
+fi
+
+
+# Base-image pins live in Containerfiles, and the layout gives them
+# deploy/containerfile/. Dependabot's docker fetcher reads every Dockerfile or
+# Containerfile in the entry's directory, so one entry covers all of them there.
+fixture "a docker entry covers every Containerfile in its directory" "$VERSION
+  - package-ecosystem: docker
+    directory: /deploy/containerfile
+    schedule:
+      interval: weekly" deploy/containerfile/Containerfile \
+  deploy/containerfile/backend.Containerfile deploy/containerfile/Dockerfile.dev
+got="$(unwatched_in)"
+if [[ -z "$got" ]]; then
+  pass
+else
+  fail "reported '$got' for Containerfiles whose docker entry is right there"
+fi
+
+
+fixture "a Containerfile with no docker entry is reported" "$VERSION
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly" apps/svc/deploy/quadlet/Containerfile \
+  apps/svc/deploy/quadlet/svc.build deploy/containerfile/web.dockerfile
+got="$(unwatched_in)"
+if [[ "$got" == "apps/svc/deploy/quadlet/Containerfile deploy/containerfile/web.dockerfile" ]]; then
+  pass
+else
+  fail "reported '$got' rather than both unwatched Containerfiles"
+fi
+
+
+# The ignore file named for a Containerfile is not an image pin, and a file
+# that only mentions one in its name is not a Containerfile.
+fixture "a container ignore file or a notes file is not a Containerfile" "$VERSION
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly" deploy/containerfile/Containerfile.dockerignore \
+  docs/containerfile-notes.md
+got="$(unwatched_in)"
+if [[ -z "$got" ]]; then
+  pass
+else
+  fail "reported '$got', which pins no base image"
+fi
+
+
+# A workspace member is bumped through the root's entry and earns none of its
+# own -- npm here, the same rule as Cargo and uv. This library compares literal
+# directories and reads no manifest's content, so it still names the member,
+# and scripts/doctor's advisory is what carries the exception. The case holds
+# the answer that advisory is written against: it fails if the root is
+# reported, or if the member is dropped by a rule only npm would get.
+fixture "an npm workspace member is named for the advisory, not the root" "$VERSION
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly" package.json package-lock.json apps/web/package.json
+got="$(unwatched_in)"
+if [[ "$got" == "apps/web/package.json" ]]; then
+  pass
+else
+  fail "reported '$got' rather than the workspace member alone"
 fi
 
 
