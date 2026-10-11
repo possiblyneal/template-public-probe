@@ -1,6 +1,20 @@
 # shellcheck shell=bash
 # Which manifests Dependabot is watching, and which tracked ones it is not.
-# Sourced by scripts/doctor, which reports the gap.
+# Sourced by scripts/doctor, which reports the gap as a passing row carrying
+# the advisory rather than as a finding. The entries are derived per
+# repository by the /repo-builder flows, so a manifest added since the last
+# update flow owes one: a line for the operator to read, never a red gate on a
+# repository for gaining a module. Nor is it not-applicable, which says the
+# check did not apply; here it applied and found something, and the detail is
+# what separates the two passing rows. A workspace member is still named here:
+# the exception for it is the advisory's, in scripts/doctor.
+#
+# The derivation rule in apps/repo-builder/src/references/lifecycle.md excludes
+# the payload tree at apps/github-repository-template/src/base-repo/, and this
+# file does not. It is mirrored into that payload, so an exclusion naming its
+# own path would ship to every generated repository as a rule about a
+# directory none of them has. The two agree while the payload ships no
+# manifest; one added there is reported here and skipped by the derivation.
 #
 # Sourced, never executed: no shebang, no executable bit, a .sh extension so
 # linters recognize it. The same rule libs/detect.sh follows, for the same
@@ -29,11 +43,26 @@
 # The manifest filenames Dependabot reads, and the package-ecosystem each one
 # earns: dependabot_ecosystem_of <basename>, empty for anything else.
 #
-# Deliberately the same six languages the rest of the template detects, and the
-# same six the mapping table in apps/repo-builder/src/references/lifecycle.md
-# states. A seventh recognized here and nowhere else is a shape no other check
-# can see, so a manifest outside this list is reported by a /repo-builder flow
-# on its own gate rather than mapped here.
+# Deliberately the same six languages the rest of the template detects, plus
+# docker, and the same set the mapping table in
+# apps/repo-builder/src/references/lifecycle.md states. Anything else recognized
+# here and nowhere else is a shape no other check can see, so a manifest outside
+# this list is reported by a /repo-builder flow on its own gate rather than
+# mapped here.
+#
+# docker is the one entry that is not a language, and the layout is why: it
+# gives base-image pins a place of their own in deploy/containerfile/, and
+# scripts/package reads the Containerfile a quadlet .build names, so the shape
+# is one the template already sees. Without an entry those FROM lines are pins
+# nothing ever bumps. Dependabot's docker fetcher matches /dockerfile|
+# containerfile/i against every file in the entry's directory (docker/lib/
+# dependabot/docker/file_fetcher.rb in dependabot-core), so one entry per
+# directory covers every such file in it. The names mapped are the
+# conventional ones -- Dockerfile, Containerfile, and either with a `.suffix`
+# or a `name.` prefix -- rather than that whole regex. A name that only
+# contains the word, such as docker-notes.md or my-dockerfile-guide.txt, earns
+# nothing; Dockerfile.<anything> does, and Dependabot reads it too. An ignore
+# file named for its Containerfile is not an image pin and maps to nothing.
 #
 # go.work and settings.gradle.kts are absent on purpose. They are workspace
 # files: they say where the modules are, and the modules are what Dependabot
@@ -43,7 +72,23 @@
 # dependabot/dependabot-core#14909 on 2026-05-05, a date on the engine rather
 # than on its rollout. Mapping manifests and nothing else is the rule that does
 # not have to track which ecosystem gained it when.
+#
+# pyproject.toml earns pip here and uv where a uv.lock is tracked beside it,
+# which dependabot_unwatched_manifests decides because it holds the tracked
+# list. pip's updater does not move uv.lock, so a pip entry over a uv project
+# opens bumps whose lockfile still pins the old version.
 dependabot_ecosystem_of() {
+  # Lowercased for docker alone: Dependabot matches those names in any case,
+  # while every language manifest below is read under its exact name.
+  case "${1,,}" in
+    *.dockerignore | *.containerignore) return 0 ;;
+    dockerfile | containerfile | dockerfile.* | containerfile.* \
+      | *.dockerfile | *.containerfile)
+      printf 'docker\n'
+      return 0
+      ;;
+  esac
+
   case "$1" in
     package.json) printf 'npm\n' ;;
     pyproject.toml) printf 'pip\n' ;;
@@ -277,6 +322,10 @@ dependabot_unwatched_manifests() {
 
     ecosystem="$(dependabot_ecosystem_of "${manifest##*/}")"
     [[ -n "$ecosystem" ]] || continue
+    if [[ "$ecosystem" == pip ]] \
+      && grep -qxF "${manifest%pyproject.toml}uv.lock" <<< "$tracked"; then
+      ecosystem=uv
+    fi
 
     directory="/${manifest%/*}"
     [[ "$manifest" == */* ]] || directory="/"
